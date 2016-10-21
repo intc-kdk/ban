@@ -19,9 +19,9 @@ public class BoardDataUtil {
      */
     public static class BoardItem {
         public final String tx_lb;
-        public final String tx_clr;
-        public final String in_disp_hi;
-        public final String in_disp_blink;
+        public String tx_clr;
+        public String in_disp_hi;
+        public String in_disp_blink;
 
         public BoardItem(String tx_lb ,String tx_clr ,String in_disp_hi ,String in_disp_blink){
             this.tx_lb = tx_lb;

@@ -11,10 +11,12 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.intc_service.boardapp.Util.BoardDataUtil;
 import com.intc_service.boardapp.Util.BoardDataUtil.BoardItem;
 import com.intc_service.boardapp.Util.DataStructureUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StatusActivity extends AppCompatActivity
         implements ReceptionFragment.ReceptionFragmentListener,
@@ -28,17 +30,21 @@ public class StatusActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
 
     private ReceptionFragment recieveFragment;
-
+    private StatusFragment mStatusFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
 
+        //  機器一覧フラグメントの取得
+        mStatusFragment = (StatusFragment)getSupportFragmentManager()
+                .findFragmentById(R.id.StatusList);
+
         // リスナーの設定
         Button btn = (Button) findViewById(R.id.btnReturnBoard);
         btn.setOnClickListener(this);
 
-        // 手順データをIntentから取得
+        // 機器データをIntentから取得
         Intent intent = getIntent();
 
         // ヘッダ設定
@@ -98,6 +104,8 @@ public class StatusActivity extends AppCompatActivity
 
                 //　背景色の設定
                 setBackground(bo_active);
+                //　機器情報の更新
+                updateEquipments(arrEquip);
 
             }
         }
@@ -118,6 +126,16 @@ public class StatusActivity extends AppCompatActivity
                 finish();
                 break;
         }
+    }
+
+    private void updateEquipments(ArrayList data){
+
+        List<BoardItem> ITEMS = new ArrayList<>();
+        for (Object value : data) {
+            Bundle row = (Bundle) value;  // Bundleの入れ子なのでキャスト
+            ITEMS.add(BoardDataUtil.toList(row));
+        }
+        mStatusFragment.updateStatus(ITEMS);
     }
     // 応答受信
 /*    @Override

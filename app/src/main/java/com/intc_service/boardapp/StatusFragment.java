@@ -31,6 +31,7 @@ public class StatusFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
+    private StatusRecyclerViewAdapter mStatusViewAdapter;
     private List<BoardItem> ITEMS = new ArrayList<>();
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,7 +80,11 @@ public class StatusFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new StatusRecyclerViewAdapter(ITEMS, mListener));
+
+            // Adapterへの参照
+            mStatusViewAdapter = (StatusRecyclerViewAdapter)recyclerView.getAdapter();
         }
+
         return view;
     }
 
@@ -112,7 +117,14 @@ public class StatusFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(BoardItem item);
     }
+
+    public void updateStatus(List<BoardItem> data){
+        List<BoardItem> Items = new ArrayList<>();
+        Items = data;
+        mStatusViewAdapter.updateStatus(Items);
+        mStatusViewAdapter.notifyDataSetChanged();
+    }
+
 }

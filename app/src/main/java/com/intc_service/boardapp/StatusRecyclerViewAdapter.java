@@ -90,4 +90,13 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
             return super.toString() + " '" + mLabelView.getText() + "'";
         }
     }
+
+    public void updateStatus(List<BoardItem> data){
+        for(int i=0; i<data.size(); i++){
+            mValues.get(i).tx_clr = data.get(i).tx_clr;
+            mValues.get(i).in_disp_blink = data.get(i).in_disp_blink;
+            mValues.get(i).in_disp_hi = data.get(i).in_disp_hi;
+        }
+
+    }
 }
