@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#ff4081</color>
+
+    <color name="colorBackgroundDefault">#008000</color>
+    <color name="colorBackgroundWait">#330033</color>
+    <color name="colorBackgroundProcedureRow">#1E90FF</color>
+
+    <color name="colorText">#ffffff</color>
+    <color name="colorYellowButton">#FFFF00</color>
+
+    <color name="colorBoardEquipmentText">#99ccff</color>
+    <color name="colorInstructButton">#99ffff</color>
+    <color name="colorButtonBlue">#0000ff</color>
+    <color name="colorTextBlack">#000000</color>
+    <color name="colorBoardEquipmentDoneText">#66ffcc</color>
+    <color name="colorBackgroundActivate">#ffff00</color>
+</resources>
