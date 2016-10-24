@@ -87,7 +87,14 @@ public class StatusActivity extends AppCompatActivity
     // サーバーからの一方送信
     @Override
     public String onRequestRecieved(String data) {
-        return "";
+        DataStructureUtil dsHelper = new DataStructureUtil();
+
+        String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
+        String mData = "";
+        if(cmd.equals("73")) { //機器情報
+            mData = dsHelper.makeSendData("50","");
+        }
+        return mData;
     }
 
     @Override
@@ -97,7 +104,7 @@ public class StatusActivity extends AppCompatActivity
         String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
         Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
 
-        if(cmd.equals("72")){ //機器情報
+        if(cmd.equals("73")){ //機器情報
             if(bdRecievedData.getString("format").equals("JSON")) {
                 String bo_active =bdRecievedData.getString("bo_active");
                 ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す

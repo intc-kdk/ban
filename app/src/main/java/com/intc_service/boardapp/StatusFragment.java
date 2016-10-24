@@ -27,7 +27,6 @@ import java.util.List;
  */
 public class StatusFragment extends Fragment {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -40,13 +39,9 @@ public class StatusFragment extends Fragment {
     public StatusFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static StatusFragment newInstance(int columnCount) {
         StatusFragment fragment = new StatusFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
         return fragment;
     }
 

@@ -7,6 +7,7 @@
     <color name="colorBackgroundDefault">#008000</color>
     <color name="colorBackgroundWait">#330033</color>
     <color name="colorBackgroundProcedureRow">#1E90FF</color>
+    <color name="colorBackgroundBlink">#000000</color>
 
     <color name="colorText">#ffffff</color>
     <color name="colorYellowButton">#FFFF00</color>
