@@ -18,7 +18,7 @@ public class BoardDataUtil {
      * 機器情報のクラス
      */
     public static class BoardItem {
-        public final String tx_lb;
+        public String tx_lb;
         public String tx_clr;
         public String in_disp_hi;
         public String in_disp_blink;
