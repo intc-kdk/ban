@@ -1,5 +1,9 @@
 package com.intc_service.boardapp.net;
 
+import android.content.Context;
+
+import com.intc_service.boardapp.AppLogRepository;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,13 +19,15 @@ public class TcpClient {
     private String mSendData;
     private String mHost;
     private int mPort;
+    private Context mContext;
     private Socket connection = null;
 
-    public TcpClient(String host, int port, String data)
+    public TcpClient(Context context, String host, int port, String data)
     {
         this.mHost = host;
         this.mPort = port;
         this.mSendData = data;
+        this.mContext = context;
     }
 
     public String connect() {
@@ -38,7 +44,10 @@ public class TcpClient {
             //リクエスト
             writer.write(mSendData);
             writer.flush();
-System.out.println("<< サーバーへ送信 >>"+mSendData);
+
+            AppLogRepository.create(mContext,"S",mSendData);
+            System.out.println("<< サーバーへ送信 >>"+mSendData);
+
             //レスポンス
             int result;
             StringBuilder builder = new StringBuilder();
@@ -49,7 +58,8 @@ System.out.println("<< サーバーへ送信 >>"+mSendData);
                 }
             }
             message=builder.toString();
-System.out.println("<< サーバーから受信 >>"+message);
+            AppLogRepository.create(mContext,"R",message);
+            System.out.println("<< サーバーから受信 >>"+message);
         } catch (IOException e) {
             message = "IOException error: " + e.getMessage();
             e.printStackTrace();

@@ -102,6 +102,7 @@ public class ReceptionFragment extends Fragment {
             @Override
             protected String doInBackground(Void... voids) {
                 String message = "";
+                Context context = getActivity();
                 try{
                     if(mServer == null) {
                         mServer = new ServerSocket();
@@ -123,6 +124,7 @@ public class ReceptionFragment extends Fragment {
                         }
                     }
                     message=builder.toString();
+                    AppLogRepository.create(context,"R",message);
 System.out.println("<< サーバーから受信 >>"+message);
                     // Activity へ リクエストを返し、返信データ（response）を受け取る
                     response = ((ReceptionFragmentListener)getActivity()).onRequestRecieved(message);
@@ -136,6 +138,7 @@ System.out.println("<< 一方送信のため終了 >>");
                         // データが設定されているとき、レスポンス送信
                         writer.write(response);
                         writer.flush();
+                        AppLogRepository.create(context,"S",response);
 System.out.println("<< サーバーへ送信 >>"+response);
                         reader.close();
                        mSocket.close(); //

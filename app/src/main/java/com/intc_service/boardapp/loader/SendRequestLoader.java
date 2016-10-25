@@ -13,6 +13,7 @@ public class SendRequestLoader extends AsyncTaskLoader<String>{
     private String mHost;
     private int mPort;
     private String mData;
+    private Context mContext;
     // 結果
     //private byte[] mData;
     private TcpClient client;
@@ -21,11 +22,12 @@ public class SendRequestLoader extends AsyncTaskLoader<String>{
         mHost = host;
         mPort = port;
         mSendData = senddata;
+        mContext = context;
     }
 
     @Override
     public String loadInBackground() {
-        client = new TcpClient(mHost, mPort, mSendData);
+        client = new TcpClient(mContext, mHost, mPort, mSendData);
 
         return client.connect();
     }
