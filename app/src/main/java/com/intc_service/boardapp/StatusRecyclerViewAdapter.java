@@ -6,6 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.CycleInterpolator;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.intc_service.boardapp.Util.BoardDataUtil.BoardItem;
@@ -54,6 +58,23 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
         int btnColor = getColorInt(holder.mItem.tx_clr);
         holder.mLabelView.setBackgroundColor(btnColor);
 
+        AlphaAnimation alphaAnim = new AlphaAnimation(0f, 1f);
+        alphaAnim.setDuration(1500);
+        alphaAnim.setRepeatCount(Animation.INFINITE);
+        alphaAnim.setRepeatMode(Animation.RESTART);
+        alphaAnim.setInterpolator(new CycleInterpolator(1));
+        int bgWrapColor = bgWrapColor= res.getColor(R.color.colorBgTransparent);
+
+        if(holder.mItem.in_disp_blink.equals("1")){
+            bgWrapColor= res.getColor(R.color.colorTextBlack);
+            holder.mWrapFrame.setBackgroundColor(bgWrapColor);
+            holder.mWrapFrame.startAnimation(alphaAnim);
+        }else{
+            holder.mWrapFrame.setBackgroundColor(bgWrapColor);
+            alphaAnim.cancel();
+            //mWrapFrame.cancel();
+        }
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,13 +95,14 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mLabelView;
-
+        public FrameLayout mWrapFrame;
         public BoardItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mLabelView = (TextView) view.findViewById(R.id.label);
+            mWrapFrame = (FrameLayout) view.findViewById(R.id.wrap_frame);
 
         }
 

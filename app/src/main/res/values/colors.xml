@@ -18,4 +18,5 @@
     <color name="colorTextBlack">#000000</color>
     <color name="colorBoardEquipmentDoneText">#66ffcc</color>
     <color name="colorBackgroundActivate">#ffff00</color>
+    <color name="colorBgTransparent">#00000000</color>
 </resources>
