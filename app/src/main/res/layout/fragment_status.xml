@@ -16,7 +16,6 @@
             android:id="@+id/wrap_frame">
 
             <TextView
-                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView"
@@ -28,6 +27,20 @@
                 android:paddingRight="30dp"
                 android:paddingTop="20dp" />
         </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_before"
+            android:layout_margin="16dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="20dp"
+            android:textSize="40sp"
+            android:width="700dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorText" />
 
         <TextView
             android:id="@+id/label"
@@ -42,7 +55,8 @@
             android:paddingBottom="20dp"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:paddingTop="20dp" />
+            android:paddingTop="20dp"
+            android:background="@color/colorText" />
 
     </FrameLayout>
 

@@ -2,6 +2,8 @@ package com.intc_service.boardapp;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,32 +50,63 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
                 Integer.valueOf( code.substring( 3, 6 ), 16 ) );
         return color;
     }
+    private void blinkButton(ViewHolder holder) {
+
+        // ボタンのブリンク処理
+        Resources res = holder.mView.getResources();
+        AlphaAnimation alphaWrap = new AlphaAnimation(0f, 1f);
+        alphaWrap.setDuration(1200);
+        alphaWrap.setRepeatCount(Animation.INFINITE);
+        alphaWrap.setRepeatMode(Animation.RESTART);
+        alphaWrap.setInterpolator(new CycleInterpolator(1));
+        int bgWrapColor = res.getColor(R.color.colorBgTransparent);
+
+        if (holder.mItem.in_disp_blink.equals("1")) {
+            bgWrapColor = res.getColor(R.color.colorTextBlack);
+            holder.mWrapFrame.setBackgroundColor(bgWrapColor);
+            holder.mWrapFrame.startAnimation(alphaWrap);
+        } else {
+            holder.mWrapFrame.setBackgroundColor(bgWrapColor);
+            alphaWrap.cancel();
+        }
+
+        AlphaAnimation alphaButton = new AlphaAnimation(0f, 1f);
+        alphaButton.setDuration(100);
+        alphaButton.setRepeatCount(Animation.INFINITE);
+        alphaButton.setRepeatMode(Animation.RESTART);
+        alphaButton.setInterpolator(new CycleInterpolator(1));
+
+        int btnColor = getColorInt(holder.mItem.tx_clr);
+        ColorDrawable color_drawable = (ColorDrawable) holder.mLabelView.getBackground();
+        if(Integer.toHexString(holder.mBeforeColor).equals("ffffffff")){
+            // 初回
+            holder.mBeforeColor = btnColor;
+        }else if(holder.mBeforeColor==0){
+            holder.mBeforeColor = color_drawable.getColor();
+        }
+        if(holder.mItem.in_disp_hi.equals("1")){
+            // 下地のボタンに前の色を付ける
+
+            int btnBeforeColor = holder.mBeforeColor;
+
+            if(Integer.toHexString(btnBeforeColor).equals("ffcccccc")){
+                btnBeforeColor = res.getColor(R.color.colorTextBlack);
+            }
+            holder.mLabelBefore.setBackgroundColor(btnBeforeColor);
+            holder.mLabelView.startAnimation(alphaButton);
+        }else{
+            holder.mLabelBefore.setBackgroundColor(bgWrapColor);
+            alphaButton.cancel();
+        }
+        holder.mLabelView.setBackgroundColor(btnColor);
+    }
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mLabelView.setText(mValues.get(position).tx_lb);
+        holder.mLabelBefore.setText(mValues.get(position).tx_lb);
 
-        Resources res = holder.mView.getResources();
-
-        int btnColor = getColorInt(holder.mItem.tx_clr);
-        holder.mLabelView.setBackgroundColor(btnColor);
-
-        AlphaAnimation alphaAnim = new AlphaAnimation(0f, 1f);
-        alphaAnim.setDuration(1500);
-        alphaAnim.setRepeatCount(Animation.INFINITE);
-        alphaAnim.setRepeatMode(Animation.RESTART);
-        alphaAnim.setInterpolator(new CycleInterpolator(1));
-        int bgWrapColor = bgWrapColor= res.getColor(R.color.colorBgTransparent);
-
-        if(holder.mItem.in_disp_blink.equals("1")){
-            bgWrapColor= res.getColor(R.color.colorTextBlack);
-            holder.mWrapFrame.setBackgroundColor(bgWrapColor);
-            holder.mWrapFrame.startAnimation(alphaAnim);
-        }else{
-            holder.mWrapFrame.setBackgroundColor(bgWrapColor);
-            alphaAnim.cancel();
-            //mWrapFrame.cancel();
-        }
+        blinkButton(holder);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,13 +128,16 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mLabelView;
+        public final TextView mLabelBefore;
         public FrameLayout mWrapFrame;
         public BoardItem mItem;
+        public int mBeforeColor = 0;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mLabelView = (TextView) view.findViewById(R.id.label);
+            mLabelBefore = (TextView) view.findViewById(R.id.label_before);
             mWrapFrame = (FrameLayout) view.findViewById(R.id.wrap_frame);
 
         }
