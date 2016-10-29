@@ -71,7 +71,7 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
         }
 
         AlphaAnimation alphaButton = new AlphaAnimation(0f, 1f);
-        alphaButton.setDuration(100);
+        alphaButton.setDuration(1500);
         alphaButton.setRepeatCount(Animation.INFINITE);
         alphaButton.setRepeatMode(Animation.RESTART);
         alphaButton.setInterpolator(new CycleInterpolator(1));
