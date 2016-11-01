@@ -61,7 +61,7 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
         alphaWrap.setInterpolator(new CycleInterpolator(1));
         int bgWrapColor = res.getColor(R.color.colorBgTransparent);
 
-        if (holder.mItem.in_disp_blink.equals("1")) {
+        if (holder.mItem.in_disp_hi.equals("1")) {
             bgWrapColor = res.getColor(R.color.colorTextBlack);
             holder.mWrapFrame.setBackgroundColor(bgWrapColor);
             holder.mWrapFrame.startAnimation(alphaWrap);
@@ -84,14 +84,14 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
         }else if(holder.mBeforeColor==0){
             holder.mBeforeColor = color_drawable.getColor();
         }
-        if(holder.mItem.in_disp_hi.equals("1")){
+        if(holder.mItem.in_disp_blink.equals("1")){
             // 下地のボタンに前の色を付ける
 
             int btnBeforeColor = holder.mBeforeColor;
 
-            if(Integer.toHexString(btnBeforeColor).equals("ffcccccc")){
+            //if(Integer.toHexString(btnBeforeColor).equals("ffcccccc")){
                 btnBeforeColor = res.getColor(R.color.colorTextBlack);
-            }
+            //}
             holder.mLabelBefore.setBackgroundColor(btnBeforeColor);
             holder.mLabelView.startAnimation(alphaButton);
         }else{
