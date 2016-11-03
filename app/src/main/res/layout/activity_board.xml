@@ -27,16 +27,27 @@
             android:textColor="@color/colorTextBlack"
             android:layout_marginBottom="30dp" />
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/TableLayout"
-            android:layout_gravity="center_horizontal"
-            android:background="#5bd626"
-            android:layout_margin="20dp"
-            android:paddingBottom="1dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="940dp">
 
-        </TableLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/TableLayout"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#5bd626"
+                    android:layout_margin="20dp"
+                    android:paddingBottom="1dp">
+
+                </TableLayout>
+            </LinearLayout>
+        </ScrollView>
 
         <Button
             android:text="場所選択に戻る"
