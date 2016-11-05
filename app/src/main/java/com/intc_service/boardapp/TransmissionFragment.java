@@ -28,6 +28,8 @@ public class TransmissionFragment extends Fragment implements LoaderManager.Load
 
     private String mHost;
     private int mPort;
+    private String localHost;
+    private int localPort;
 
     private TransmissionFragmentListener mListener;
 
@@ -55,6 +57,8 @@ public class TransmissionFragment extends Fragment implements LoaderManager.Load
         Context context = getActivity();
         mHost = SettingPrefUtil.getServerIpAddress(context);
         mPort = SettingPrefUtil.getServerPort(context);
+        localHost = SettingPrefUtil.getClientIpAddress(context);
+        localPort = SettingPrefUtil.getClientPort(context);
     }
 
     @Override
@@ -88,7 +92,9 @@ public class TransmissionFragment extends Fragment implements LoaderManager.Load
     public Loader<String> onCreateLoader(int id, Bundle args) {
         if(args != null) {
             String data = args.getString("Data");
-            return  new SendRequestLoader(getActivity(), mHost, mPort, data);
+            String host = args.getString("Host");
+            int port = args.getInt("Port");
+            return  new SendRequestLoader(getActivity(), host, port, data);
         }
         return null;
     }
@@ -112,11 +118,22 @@ public class TransmissionFragment extends Fragment implements LoaderManager.Load
         if(data != null) {
             Bundle args = new Bundle();
             args.putString("Data",data);
+            args.putString("Host",mHost);
+            args.putInt("Port",mPort);
             // Loaderを初期化する
             getLoaderManager().restartLoader(1, args, this);  // onCreateLoaderが呼ばれる
         }
     }
-
+    public void halt(String data){
+        if(data != null) {
+            Bundle args = new Bundle();
+            args.putString("Data",data);
+            args.putString("Host",localHost);
+            args.putInt("Port",localPort);
+            // Loaderを初期化する
+            getLoaderManager().restartLoader(1, args, this);  // onCreateLoaderが呼ばれる
+        }
+    }
     /**
 
      */

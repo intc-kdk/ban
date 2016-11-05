@@ -46,7 +46,7 @@ public class TcpClient {
             writer.flush();
 
             AppLogRepository.create(mContext,"S",mSendData);
-            System.out.println("<< サーバーへ送信 >>"+mSendData);
+            System.out.println("<< サーバーへ送信1 >>"+mSendData);
 
             //レスポンス
             int result;
@@ -59,7 +59,7 @@ public class TcpClient {
             }
             message=builder.toString();
             AppLogRepository.create(mContext,"R",message);
-            System.out.println("<< サーバーから受信 >>"+message);
+            System.out.println("<< サーバーから受信1 >>"+message);
         } catch (IOException e) {
             message = "IOException error: " + e.getMessage();
             e.printStackTrace();

@@ -18,6 +18,9 @@ public class SettingPrefUtil {
     private static final String KEY_SERVER_PORT = "port.server";    // key
     private static final int KEY_SERVER_PORT_DEFAULT = 1234;   // default value
 
+    private static final String KEY_CLIENT_IP_ADDR = "ip.client";             // key
+    private static final String KEY_CLIENT_IP_ADDR_DEFAULT = "127.0.0.1"; // default value
+
     private static final String KEY_CLIENT_PORT = "port.client";    // key
     private static final int KEY_CLIENT_PORT_DEFAULT = 5678;   // default value
 
@@ -29,6 +32,10 @@ public class SettingPrefUtil {
     public static int getServerPort(Context context){
         SharedPreferences sp = context.getSharedPreferences( PREF_FILE_NAME, Context.MODE_PRIVATE );
         return sp.getInt( KEY_SERVER_PORT, KEY_SERVER_PORT_DEFAULT);
+    }
+    public static String getClientIpAddress(Context context){
+        SharedPreferences sp = context.getSharedPreferences( PREF_FILE_NAME, Context.MODE_PRIVATE );
+        return sp.getString( KEY_CLIENT_IP_ADDR, KEY_CLIENT_IP_ADDR_DEFAULT);
     }
     public static int getClientPort(Context context){
         SharedPreferences sp = context.getSharedPreferences( PREF_FILE_NAME, Context.MODE_PRIVATE );

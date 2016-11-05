@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatusActivity extends AppCompatActivity
-        implements ReceptionFragment.ReceptionFragmentListener,
+        implements TransmissionFragment.TransmissionFragmentListener, ReceptionFragment.ReceptionFragmentListener,
         StatusFragment.OnListFragmentInteractionListener, View.OnClickListener {
 
     private static final String TAG_TRANS = "No_UI_Fragment1";
@@ -29,6 +29,7 @@ public class StatusActivity extends AppCompatActivity
     private FragmentTransaction transaction;
     private FragmentManager fragmentManager;
 
+    private TransmissionFragment sendFragment;
     private ReceptionFragment recieveFragment;
     private StatusFragment mStatusFragment;
     @Override
@@ -58,11 +59,13 @@ public class StatusActivity extends AppCompatActivity
         //　背景色の設定
         setBackground(bo_active);
 
-        // ReceptionFragment を　生成
+        // TransmissionFragment/ReceptionFragment を　生成
+        sendFragment = TransmissionFragment.newInstance();
         recieveFragment = ReceptionFragment.newInstance();
 
         fragmentManager = getFragmentManager();
         transaction = fragmentManager.beginTransaction();
+        transaction.add(sendFragment, TAG_TRANS);
         transaction.add(recieveFragment, TAG_RECEP);
 
         transaction.commit();
@@ -84,7 +87,7 @@ public class StatusActivity extends AppCompatActivity
 
     }
 
-    // サーバーからの一方送信
+    // サーバーからの送信
     @Override
     public String onRequestRecieved(String data) {
         DataStructureUtil dsHelper = new DataStructureUtil();
@@ -93,6 +96,8 @@ public class StatusActivity extends AppCompatActivity
         String mData = "";
         if(cmd.equals("73")) { //機器情報
             mData = dsHelper.makeSendData("50","");
+        }else if(cmd.equals("99")){
+            mData = "99@$";
         }
         return mData;
     }
@@ -113,24 +118,22 @@ public class StatusActivity extends AppCompatActivity
                 setBackground(bo_active);
                 //　機器情報の更新
                 updateEquipments(arrEquip);
-
+                // 受信待機
+                recieveFragment.listen();
             }
+        }else if(cmd.equals("99")) { // accept キャンセル
+            // ここでは何もせず、応答の"99"受信で処理
+
         }
-        // 受信待機
-        recieveFragment.listen();
+
     }
     public void onClick(View v){
         int id = v.getId();
-        Intent intent;
 
         switch (id){
             case R.id.btnReturnBoard:
-                //recieveFragment.onPause();
-                //recieveFragment.closeServer();
-                // 盤選択に戻る
-                intent = new Intent(this,BoardActivity.class);
-                setResult(RESULT_OK, intent);
-                finish();
+                sendFragment.halt("99@$");
+
                 break;
         }
     }
@@ -144,34 +147,31 @@ public class StatusActivity extends AppCompatActivity
         }
         mStatusFragment.updateStatus(ITEMS);
     }
+
     // 応答受信
-/*    @Override
+    @Override
     public void onResponseRecieved(String data) {
         DataStructureUtil dsHelper = new DataStructureUtil();
 
         String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
         Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
-
-        if(cmd.equals("72")){ //機器情報
-            if(bdRecievedData.getString("format").equals("JSON")) {
-                ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
-
-                for (Object value : arrEquip) {
-                    Bundle row = (Bundle) value;  // Bundleの入れ子なのでキャスト
-                    System.out.print("tx_lb:"+row.getString("tx_lb"));
-                    System.out.print(" tx_clr:"+row.getString("tx_clr"));
-                    System.out.print(" in_disp_hi:"+row.getString("in_disp_hi"));
-                    System.out.println(" tx_blink:"+row.getString("in_disp_blink"));
-
-                }
-            }
+        // コマンド[99]応答受信
+        if(cmd.equals("99")) {
+            recieveFragment.closeServer(); //待ち受けを中止する。
+            // 盤選択に戻る
+            Intent intent;
+            intent = new Intent(this, BoardActivity.class);
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 
-*/
+    @Override
+    public void onFinishTransmission(String data) {
+
+    }
     @Override
     public void onListFragmentInteraction(BoardItem item) {
 
     }
-
 }
