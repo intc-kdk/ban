@@ -18,6 +18,7 @@ import com.intc_service.boardapp.Util.BoardDataUtil.BoardItem;
 import com.intc_service.boardapp.StatusFragment.OnListFragmentInteractionListener;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
         // ボタンのブリンク処理
         Resources res = holder.mView.getResources();
         AlphaAnimation alphaWrap = new AlphaAnimation(0f, 1f);
-        alphaWrap.setDuration(1200);
+        alphaWrap.setDuration(1500);
         alphaWrap.setRepeatCount(Animation.INFINITE);
         alphaWrap.setRepeatMode(Animation.RESTART);
         alphaWrap.setInterpolator(new CycleInterpolator(1));
@@ -100,12 +101,57 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
         }
         holder.mLabelView.setBackgroundColor(btnColor);
     }
+    private void setButtonSize(ViewHolder holder){
+        Iterator<BoardItem> i = mValues.iterator();
+        int cnt=0;
+        while(i.hasNext()){
+            BoardItem item = i.next();
+            //ステータスが"1"（確認中）in_snoを返す
+            if(!item.tx_lb.equals("") && !item.tx_clr.equals("")){
+                cnt++;
+            }
+        }
+        // サイズはpixel指定
+        switch (cnt){
+            case 1:
+                holder.mLabelView.setHeight(900);
+                holder.mLabelView.setTextSize(80);
+                holder.mLabelBefore.setHeight(650);
+                holder.mLabelBefore.setTextSize(80);
+                break;
+            case 2:
+                holder.mLabelView.setHeight(600);
+                holder.mLabelView.setTextSize(70);
+                holder.mLabelBefore.setHeight(350);
+                holder.mLabelBefore.setTextSize(70);
+                break;
+            case 3:
+                holder.mLabelView.setHeight(420);
+                holder.mLabelView.setTextSize(65);
+                holder.mLabelBefore.setHeight(250);
+                holder.mLabelBefore.setTextSize(65);
+                break;
+            case 4:
+                holder.mLabelView.setHeight(300);
+                holder.mLabelView.setTextSize(65);
+                holder.mLabelBefore.setHeight(200);
+                holder.mLabelBefore.setTextSize(65);
+                break;
+            default:
+                holder.mLabelView.setHeight(225);
+                holder.mLabelView.setTextSize(40);
+                holder.mLabelBefore.setHeight(155);
+                holder.mLabelBefore.setTextSize(40);
+                break;
+        }
+    }
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mLabelView.setText(mValues.get(position).tx_lb);
         holder.mLabelBefore.setText(mValues.get(position).tx_lb);
 
+        setButtonSize(holder);
         blinkButton(holder);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

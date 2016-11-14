@@ -145,16 +145,12 @@ public class BoardActivity extends AppCompatActivity
                 Intent intent = new Intent(this,StatusActivity.class);
                 intent.putExtra("bname",selectedBoard);
                 intent.putExtra("boardinfo",bdRecievedData);
-                startActivityForResult(intent, REQUEST_CODE_OPERATION);
+                startActivity(intent);
             }
         }
 
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // 盤操作画面からの戻り
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+
     @Override
     public void onFinishTransmission(String data) {
 

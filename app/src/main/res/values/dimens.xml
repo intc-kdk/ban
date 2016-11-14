@@ -3,4 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="textSize1">80sp</dimen>
+    <dimen name="textSize2">70sp</dimen>
+    <dimen name="textSize3">65sp</dimen>
+    <dimen name="textSize4">65sp</dimen>
+    <dimen name="textSize5">40sp</dimen>
+    <dimen name="hight1">650px</dimen>
+    <dimen name="hight2">350px</dimen>
+    <dimen name="hight3">250px</dimen>
+    <dimen name="hight4">200px</dimen>
+    <dimen name="hight5">155px</dimen>
 </resources>

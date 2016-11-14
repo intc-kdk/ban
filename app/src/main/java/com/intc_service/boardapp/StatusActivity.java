@@ -160,9 +160,8 @@ public class StatusActivity extends AppCompatActivity
             recieveFragment.closeServer(); //待ち受けを中止する。
             // 盤選択に戻る
             Intent intent;
-            intent = new Intent(this, BoardActivity.class);
-            setResult(RESULT_OK, intent);
-            finish();
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
     }
 

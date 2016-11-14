@@ -55,7 +55,10 @@ public class StatusFragment extends Fragment {
         ArrayList arrDevice = (ArrayList)bdBoard.getParcelableArrayList("m_device"); //機器情報を取り出す
         for (Object value : arrDevice) {
             Bundle row = (Bundle) value;  // Bundleの入れ子なのでキャスト
-            ITEMS.add(BoardDataUtil.toList(row));
+            //if(!row.getString("tx_lb").equals("") && !row.getString("tx_clr").equals("")){
+                // ラベル、カラーが空白の行は無視
+                ITEMS.add(BoardDataUtil.toList(row));
+            //}
         }
 
     }

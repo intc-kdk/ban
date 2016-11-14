@@ -29,7 +29,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="967dp"
-            android:layout_weight="0.87">
+            android:layout_weight="0.87"
+            android:layout_gravity="center_vertical">
 
             <fragment
                 android:layout_height="1003dp"

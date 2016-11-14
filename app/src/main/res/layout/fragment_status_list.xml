@@ -5,9 +5,11 @@
     android:id="@+id/list"
     android:name="com.intc_service.boardapp.Util.StatusFragment"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.intc_service.boardapp.StatusFragment"
-    tools:listitem="@layout/fragment_status" />
+    tools:listitem="@layout/fragment_status"
+    android:paddingBottom="20dp"
+    android:layout_gravity="center_vertical" />

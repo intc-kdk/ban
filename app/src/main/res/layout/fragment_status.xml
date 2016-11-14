@@ -22,10 +22,7 @@
                 android:width="700dp"
                 android:textSize="40sp"
                 android:layout_margin="5dp"
-                android:paddingBottom="20dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:paddingTop="20dp" />
+                android:gravity="center_vertical" />
         </FrameLayout>
 
         <TextView
@@ -33,14 +30,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/label_before"
             android:layout_margin="16dp"
-            android:paddingBottom="20dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="20dp"
             android:textSize="40sp"
             android:width="700dp"
             android:textAlignment="center"
-            android:textColor="@color/colorText" />
+            android:textColor="@color/colorText"
+            android:gravity="center_vertical" />
 
         <TextView
             android:id="@+id/label"
@@ -50,13 +44,10 @@
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/colorText"
             android:textAlignment="center"
-            android:textSize="40sp"
             android:width="700dp"
-            android:paddingBottom="20dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="20dp"
-            android:background="@color/colorText" />
+            android:background="@color/colorText"
+            android:gravity="center_vertical"
+            android:textSize="40sp" />
 
     </FrameLayout>
 
