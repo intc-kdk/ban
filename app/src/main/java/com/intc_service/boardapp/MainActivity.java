@@ -17,6 +17,7 @@ import com.intc_service.boardapp.Util.alertDialogUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -35,11 +36,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // [P] 起動電文を作成
-        DataStructureUtil ds = new DataStructureUtil();
-        String mData = ds.makeSendData("30","");
-
-        // [P] 起動を通知
         // TransmissionFragment を　生成
         sendFragment = TransmissionFragment.newInstance();
 
@@ -50,10 +46,31 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
         fragmentManager.executePendingTransactions();   // 即時実行
 
-        // [P] 起動通知を送信
-        sendFragment.send(mData);
+        // 盤ステータスからの戻りかどうか確認
+        Intent intent = getIntent();
+        String recievedData = "";
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            Iterator<?> iterator = extras.keySet().iterator();
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                if (key.equals("cmd71")) {
+                    recievedData = extras.getString("cmd71");
+                    break;
+                }
+            }
+        }
+        if (recievedData.isEmpty()) {
+            // [P] 起動電文を作成
+            DataStructureUtil ds = new DataStructureUtil();
+            String mData = ds.makeSendData("30", "");
+            // [P] 起動通知を送信
+            sendFragment.send(mData);
+        } else {
+            // 場所選択画面表示
+            onResponseRecieved(recievedData);
+        }
     }
-
     @Override
     protected void onStart(){
         super.onStart();
@@ -68,10 +85,20 @@ public class MainActivity extends AppCompatActivity
         String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
         bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
 
-        if(cmd.equals("71")){ //起動応答
-            if(bdRecievedData.getString("format").equals("JSON")) {
+        if(cmd.equals("71")) { //起動応答
+            if (bdRecievedData.getString("format").equals("JSON")) {
                 // 場所一覧を作成
                 setTableRows(bdRecievedData.getBundle("盤情報"));
+            }
+        }else if(cmd.equals("72")){ //機器情報
+            if(bdRecievedData.getString("format").equals("JSON")) {
+                ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
+                String bname = bdRecievedData.getString("tx_name");
+                // 盤ステータス画面へ
+                Intent intent = new Intent(this,StatusActivity.class);
+                intent.putExtra("bname",bname);
+                intent.putExtra("boardinfo",bdRecievedData);
+                startActivity(intent);
             }
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);

@@ -33,6 +33,9 @@ public class StatusActivity extends AppCompatActivity
     private TransmissionFragment sendFragment;
     private ReceptionFragment recieveFragment;
     private StatusFragment mStatusFragment;
+
+    private String mRecievedData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,8 +150,10 @@ public class StatusActivity extends AppCompatActivity
 
         switch (id){
             case R.id.btnReturnBoard:
-                sendFragment.halt("99@$");
-
+                DataStructureUtil ds = new DataStructureUtil();
+                String mData = ds.makeSendData("32", "");
+                // [P] 盤再選択コマンドを送信
+                sendFragment.send(mData);
                 break;
         }
     }
@@ -170,12 +175,17 @@ public class StatusActivity extends AppCompatActivity
 
         String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
         Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
+
         // コマンド[99]応答受信
-        if(cmd.equals("99")) {
+        if(cmd.equals("71")) {  // 場所、盤名情報受信
+            mRecievedData=data;
+            sendFragment.halt("99@$");  // 待ち受け終了コマンド送信
+        }else if(cmd.equals("99")) {  // コマンド[99]応答受信
             recieveFragment.closeServer(); //待ち受けを中止する。
             // 盤選択に戻る
             Intent intent;
             intent = new Intent(this, MainActivity.class);
+            intent.putExtra("cmd71",mRecievedData);  // 71（場所、盤データをセットし、場所選択画面へ）
             startActivity(intent);
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
