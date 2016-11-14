@@ -50,7 +50,7 @@ public class DataStructureUtil {
             cmd = mRecievedCmd;
         }else{
             // TODO: 不正フォーマットの処理
-            cmd = "99";
+            cmd = "";
         }
 
         return cmd;

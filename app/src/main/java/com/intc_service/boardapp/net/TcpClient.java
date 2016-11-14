@@ -9,7 +9,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 /**
  * タブレット発呼のソケット通信を行うクラス
@@ -22,6 +25,9 @@ public class TcpClient {
     private Context mContext;
     private Socket connection = null;
 
+    private final int timeout = 1000;
+    private final int retry = 2;
+
     public TcpClient(Context context, String host, int port, String data)
     {
         this.mHost = host;
@@ -31,13 +37,29 @@ public class TcpClient {
     }
 
     public String connect() {
+        int sendCnt=0;
+        String message="";
+        while(sendCnt<retry){
+            message = this.transport();
+            if(message.indexOf("Exception") < 0){
+                return message;
+            }
+            sendCnt++;
+        }
+
+        return message;
+    }
+    private String transport() {
         BufferedReader reader = null;
         BufferedWriter writer = null;
         String message = "";
 
         try {
             //ソケット
-            connection = new Socket(mHost, mPort);
+            InetSocketAddress endpoint= new InetSocketAddress(mHost, mPort);
+            connection = new Socket();
+            connection.connect(endpoint, timeout);
+            connection.setSoTimeout(timeout);
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
 
@@ -46,7 +68,7 @@ public class TcpClient {
             writer.flush();
 
             AppLogRepository.create(mContext,"S",mSendData);
-            System.out.println("<< サーバーへ送信1 >>"+mSendData);
+            System.out.println("<< サーバーへ送信 >>"+mSendData);
 
             //レスポンス
             int result;
@@ -59,17 +81,30 @@ public class TcpClient {
             }
             message=builder.toString();
             AppLogRepository.create(mContext,"R",message);
-            System.out.println("<< サーバーから受信1 >>"+message);
-        } catch (IOException e) {
-            message = "IOException error: " + e.getMessage();
+            System.out.println("<< サーバーから受信 >>"+message);
+            if(message.length() == 0 || message.indexOf("$") < 0 ){
+                // 受信サイズ0
+                System.out.println("Recieved illegal data");
+                message = "91@Recieved illegal data$";
+                AppLogRepository.create(mContext,"E",message);
+            }
+        } catch ( SocketException e) {
+            System.out.println("SocketException error");
+            message = "91@SocketException error: " + e.getMessage()+"$";
+            AppLogRepository.create(mContext,"E",message);
             e.printStackTrace();
-        } catch (Exception e){
+        } catch ( SocketTimeoutException e) {
+            System.out.println("SocketTimeoutException error");
+            message = "92@SocketTimeoutException error: " + e.getMessage()+"$";
+            AppLogRepository.create(mContext,"E",message);
             e.printStackTrace();
-            message = "Exception: " + e.getMessage();
-
+        } catch (IOException  e) {
+            System.out.println(message);
+            message = "93@IOException error: " + e.getMessage()+"$";
+            AppLogRepository.create(mContext,"E",message);
+            e.printStackTrace();
         } finally {
             try{
-                reader.close();
                 connection.close();
             } catch (IOException e) {
                 e.printStackTrace();

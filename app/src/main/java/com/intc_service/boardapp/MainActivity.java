@@ -13,6 +13,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.intc_service.boardapp.Util.DataStructureUtil;
+import com.intc_service.boardapp.Util.alertDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +73,12 @@ public class MainActivity extends AppCompatActivity
                 // 場所一覧を作成
                 setTableRows(bdRecievedData.getBundle("盤情報"));
             }
+        } else if (cmd.equals("91")) {  // 受信エラー処理
+            System.out.println("※※※※　受信エラー ※※※"+data);
+            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+        } else if (cmd.equals("92")) {  // タイムアウト
+            System.out.println("※※※※　受信タイムアウト ※※※"+data);
+            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
         }
 
         // TODO: [P] ログを取得
