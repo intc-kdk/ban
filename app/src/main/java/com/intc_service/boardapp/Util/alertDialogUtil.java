@@ -14,9 +14,9 @@ import com.intc_service.boardapp.R;
  * Created by takashi on 2016/11/13.
  */
 
-public class alertDialog {
+public class alertDialogUtil {
 
-    private alertDialog(){}
+    private alertDialogUtil(){}
 
     public static void show(Activity activity, String title, String msg){
         new AlertDialog.Builder(activity)

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.intc_service.boardapp.Util.BoardDataUtil;
 import com.intc_service.boardapp.Util.BoardDataUtil.BoardItem;
 import com.intc_service.boardapp.Util.DataStructureUtil;
-import com.intc_service.boardapp.Util.alertDialog;
+import com.intc_service.boardapp.Util.alertDialogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,11 +131,11 @@ public class StatusActivity extends AppCompatActivity
 
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
-            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
             recieveFragment.listen();
         } else if (cmd.equals("92")) {  // タイムアウト
             System.out.println("※※※※　受信タイムアウト ※※※"+data);
-            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
             recieveFragment.listen();
         }else{
             recieveFragment.listen();
@@ -179,10 +179,10 @@ public class StatusActivity extends AppCompatActivity
             startActivity(intent);
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
-            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
         } else if (cmd.equals("92")) {  // タイムアウト
             System.out.println("※※※※　受信タイムアウト ※※※"+data);
-            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
         }
     }
 

@@ -15,11 +15,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
 import com.intc_service.boardapp.Util.DataStructureUtil;
-import com.intc_service.boardapp.Util.alertDialog;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import com.intc_service.boardapp.Util.alertDialogUtil;
 
 public class BoardActivity extends AppCompatActivity
         implements View.OnClickListener, TransmissionFragment.TransmissionFragmentListener{
@@ -150,10 +146,10 @@ public class BoardActivity extends AppCompatActivity
             }
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
-            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
         } else if (cmd.equals("92")) {  // タイムアウト
             System.out.println("※※※※　受信タイムアウト ※※※"+data);
-            alertDialog.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
         }
 
     }
