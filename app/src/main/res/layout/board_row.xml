@@ -40,6 +40,16 @@
             android:paddingRight="15dp"
             android:paddingTop="12dp"
             android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:text="選択済み"
+            android:layout_width="172dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:textSize="36sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorTextBlack"
+            android:gravity="center" />
     </FrameLayout>
 
 </TableRow>

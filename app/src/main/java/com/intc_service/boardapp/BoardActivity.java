@@ -74,12 +74,21 @@ public class BoardActivity extends AppCompatActivity
         TableRow tr = (TableRow)vg.getChildAt(i);
         String tx_bname = row.getString("tx_bname");
         String in_bno = row.getString("in_bno");
+        String tx_rip = row.getString("tx_rip");
 
         ((TextView)(tr.getChildAt(0))).setText(tx_bname);
         ((TextView)(tr.getChildAt(0))).setTag(in_bno);
         ViewGroup fl =(FrameLayout)(tr.getChildAt(1));
-        ((Button)fl.getChildAt(0)).setOnClickListener(this);
-        ((Button)fl.getChildAt(0)).setTag(i);
+        if(tx_rip.isEmpty()) {  // リモートIPが空のとき、ボタン表示
+            ((Button)fl.getChildAt(0)).setVisibility(View.VISIBLE);
+            ((Button)fl.getChildAt(0)).setOnClickListener(this);
+            ((Button)fl.getChildAt(0)).setTag(i);
+            ((TextView)fl.getChildAt(1)).setVisibility(View.INVISIBLE);
+        }else{
+            ((Button)fl.getChildAt(0)).setVisibility(View.INVISIBLE);
+            ((TextView)fl.getChildAt(1)).setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void setTableRows(ViewGroup vg, ArrayList bdRows){
