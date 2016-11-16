@@ -25,7 +25,7 @@ public class TcpClient {
     private Context mContext;
     private Socket connection = null;
 
-    private final int timeout = 1000;
+    private final int timeout = 3000;
     private final int retry = 2;
 
     public TcpClient(Context context, String host, int port, String data)

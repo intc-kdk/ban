@@ -39,7 +39,7 @@ public class ReceptionFragment extends Fragment {
     private BufferedReader reader = null;
     private ReceptionFragmentListener mListener;
 
-    private final int timeout = 1000;
+    private final int timeout = 3000;
 
     public ReceptionFragment() {
         // Required empty public constructor
