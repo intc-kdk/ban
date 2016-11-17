@@ -22,26 +22,35 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
-        implements TransmissionFragment.TransmissionFragmentListener, View.OnClickListener {
+        implements TransmissionFragment.TransmissionFragmentListener, ReceptionFragment.ReceptionFragmentListener,
+        View.OnClickListener {
 
     private static final String TAG_TRANS = "No_UI_Fragment1";
+    private static final String TAG_RECEP = "No_UI_Fragment2";
 
     private FragmentTransaction transaction;
     private FragmentManager fragmentManager;
 
     private TransmissionFragment sendFragment;
+    private ReceptionFragment recieveFragment;
     private Bundle bdRecievedData = new Bundle();
+
+    private String mBname;
+    private Bundle mBoardinfo = new Bundle();
+    private String mTag="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TransmissionFragment を　生成
+        // TransmissionFragment/ReceptionFragment を　生成
         sendFragment = TransmissionFragment.newInstance();
+        recieveFragment = ReceptionFragment.newInstance();
 
         fragmentManager = getFragmentManager();
         transaction = fragmentManager.beginTransaction();
         transaction.add(sendFragment, TAG_TRANS);
+        transaction.add(recieveFragment, TAG_RECEP);
 
         transaction.commit();
         fragmentManager.executePendingTransactions();   // 即時実行
@@ -70,6 +79,8 @@ public class MainActivity extends AppCompatActivity
             // 場所選択画面表示
             onResponseRecieved(recievedData);
         }
+
+        recieveFragment.listen();
     }
     @Override
     protected void onStart(){
@@ -88,18 +99,34 @@ public class MainActivity extends AppCompatActivity
         if(cmd.equals("71")) { //起動応答
             if (bdRecievedData.getString("format").equals("JSON")) {
                 // 場所一覧を作成
+                mBoardinfo = bdRecievedData;
                 setTableRows(bdRecievedData.getBundle("盤情報"));
             }
         }else if(cmd.equals("72")){ //機器情報
             if(bdRecievedData.getString("format").equals("JSON")) {
                 ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
-                String bname = bdRecievedData.getString("tx_name");
+                mBname = bdRecievedData.getString("tx_name");
+                mBoardinfo = bdRecievedData;
+                sendFragment.halt("99@$");  // 待ち受けを停止する
+
+            }
+        } else if (cmd.equals("99")) {  // サーバークローズ
+            recieveFragment.closeServer(); //待ち受けを中止する。
+            if(mTag.isEmpty()){
                 // 盤ステータス画面へ
-                Intent intent = new Intent(this,StatusActivity.class);
-                intent.putExtra("bname",bname);
-                intent.putExtra("boardinfo",bdRecievedData);
+                Intent intent = new Intent(this, StatusActivity.class);
+                intent.putExtra("bname", mBname);
+                intent.putExtra("boardinfo", mBoardinfo);
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(this,BoardActivity.class);
+                // 盤選択画面へ
+                intent.putExtra("key",mTag);
+                intent.putExtra("info",mBoardinfo.getBundle("盤情報"));
+
                 startActivity(intent);
             }
+
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
             alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
@@ -151,14 +178,67 @@ public class MainActivity extends AppCompatActivity
 
     }
     public void onClick(View v){
-        String tag = (String)v.getTag();
+        mTag = (String)v.getTag();
 
-        Intent intent = new Intent(this,BoardActivity.class);
+        sendFragment.halt("99@$"); // 受信待機を破棄して、次画面へ
+        /*Intent intent = new Intent(this,BoardActivity.class);
         // 盤選択画面へ
         intent.putExtra("key",tag);
         intent.putExtra("info",bdRecievedData.getBundle("盤情報"));
 
-        startActivity(intent);
+        startActivity(intent);*/
 
+    }
+
+    @Override
+    public String onRequestRecieved(String data) {
+        // サーバーからの要求（data）を受信
+        //System.out.println("ReqRecieved:"+data);
+        String mData = "";
+        DataStructureUtil dsHelper = new DataStructureUtil();
+
+        String cmd = dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
+
+        Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
+        if (cmd.equals("9C")) {  // 電源OFF画面 onFinishRecieveProgress で処理
+            mData = "50@$";
+        } else if (cmd.equals("99")) {
+            mData = "99@$";
+        } else if (cmd.equals("91")) {  // 受信エラー処理 onFinishRecieveProgress で処理
+            mData = "";
+        } else if (cmd.equals("92")) {  // タイムアウト onFinishRecieveProgress で処理
+            mData = "";
+        }
+
+        return mData;
+    }
+
+    @Override
+    public void onFinishRecieveProgress(String data) {
+        // サーバー発呼のコマンド送受信後の処理
+        DataStructureUtil dsHelper = new DataStructureUtil();
+
+        String cmd = dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
+
+        Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
+        if (cmd.equals("9C")) {  // 電源OFF画面
+            Intent intent = new Intent(this, EndOffActivity.class);
+            startActivity(intent);
+        } else if (cmd.equals("99")) { // accept キャンセル
+            // ここでは何もせず、応答の"99"受信で処理
+        } else if (cmd.equals("91")) {  // 受信エラー処理
+            System.out.println("※※※※　受信エラー ※※※");
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            //想定外コマンドの時も受信待機は継続
+            recieveFragment.listen();
+        } else if (cmd.equals("92")) {  // タイムアウト
+            System.out.println("※※※※　受信タイムアウト ※※※");
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            //想定外コマンドの時も受信待機は継続
+            recieveFragment.listen();
+        } else {
+            //想定外コマンドの時も受信待機は継続
+            recieveFragment.listen();
+        }
     }
 }

@@ -99,7 +99,9 @@ public class StatusActivity extends AppCompatActivity
         String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
         String mData = "";
         if(cmd.equals("73")) { //機器情報
-            mData = dsHelper.makeSendData("50","");
+            mData = dsHelper.makeSendData("50", "");
+        }else if (cmd.equals("9C")) {  // 電源OFF画面 onFinishRecieveProgress で処理
+            mData = "50@$";
         }else if(cmd.equals("99")){
             mData = "99@$";
         } else if (cmd.equals("91")) {  // 受信エラー処理 onFinishRecieveProgress で処理
@@ -117,10 +119,10 @@ public class StatusActivity extends AppCompatActivity
         String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
         Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
 
-        if(cmd.equals("73")){ //機器情報
-            if(bdRecievedData.getString("format").equals("JSON")) {
-                String bo_active =bdRecievedData.getString("bo_active");
-                ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
+        if(cmd.equals("73")) { //機器情報
+            if (bdRecievedData.getString("format").equals("JSON")) {
+                String bo_active = bdRecievedData.getString("bo_active");
+                ArrayList arrEquip = (ArrayList) bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
 
                 //　背景色の設定
                 setBackground(bo_active);
@@ -129,6 +131,9 @@ public class StatusActivity extends AppCompatActivity
                 // 受信待機
                 recieveFragment.listen();
             }
+        }else if (cmd.equals("9C")) {  // 電源OFF画面
+            Intent intent = new Intent(this, EndOffActivity.class);
+            startActivity(intent);
         }else if(cmd.equals("99")) { // accept キャンセル
             // ここでは何もせず、応答の"99"受信で処理
 

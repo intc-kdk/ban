@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class DataStructureUtil {
 
-    private static final String FORMAT = "^(\\d{2})@(.*)\\$$";
+    private static final String FORMAT = "^([0-9A-Z]{2})@(.*)\\$$";
     private static final String JSON_FORMAT = "^\\{(.*)\\}$";
     private static final String DELIMITER = "@";
     private static final String TRAILER = "$";

@@ -18,17 +18,22 @@ import com.intc_service.boardapp.Util.DataStructureUtil;
 import com.intc_service.boardapp.Util.alertDialogUtil;
 
 public class BoardActivity extends AppCompatActivity
-        implements View.OnClickListener, TransmissionFragment.TransmissionFragmentListener{
+        implements TransmissionFragment.TransmissionFragmentListener, ReceptionFragment.ReceptionFragmentListener,
+        View.OnClickListener {
 
     private static final String TAG_TRANS = "No_UI_Fragment1";
-    private static final int REQUEST_CODE_OPERATION = 1;
+    private static final String TAG_RECEP = "No_UI_Fragment2";
 
     private FragmentTransaction transaction;
     private FragmentManager fragmentManager;
 
     private TransmissionFragment sendFragment;
+    private ReceptionFragment recieveFragment;
 
     private String selectedBoard;
+
+    private String mBname;
+    private Bundle mBoardinfo = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +46,17 @@ public class BoardActivity extends AppCompatActivity
 
         // TransmissionFragment/ReceptionFragment を　生成
         sendFragment = TransmissionFragment.newInstance();
+        recieveFragment = ReceptionFragment.newInstance();
 
         fragmentManager = getFragmentManager();
         transaction = fragmentManager.beginTransaction();
         transaction.add(sendFragment, TAG_TRANS);
+        transaction.add(recieveFragment, TAG_RECEP);
 
         transaction.commit();
         fragmentManager.executePendingTransactions();   // 即時実行
+
+        recieveFragment.listen();
 
         // 盤情報をIntentから取得
         Intent intent = getIntent();
@@ -146,13 +155,23 @@ public class BoardActivity extends AppCompatActivity
         if(cmd.equals("72")){ //機器情報
             if(bdRecievedData.getString("format").equals("JSON")) {
                 ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
-
+                mBname = bdRecievedData.getString("tx_name");
+                mBoardinfo = bdRecievedData;
+                sendFragment.halt("99@$");  // 待ち受けを停止する
                 // 盤ステータス画面へ
-                Intent intent = new Intent(this,StatusActivity.class);
+                /*Intent intent = new Intent(this,StatusActivity.class);
                 intent.putExtra("bname",selectedBoard);
                 intent.putExtra("boardinfo",bdRecievedData);
-                startActivity(intent);
+                startActivity(intent);*/
             }
+        } else if (cmd.equals("99")) {  // サーバークローズ
+            recieveFragment.closeServer(); //待ち受けを中止する。
+            // 盤ステータス画面へ
+            Intent intent = new Intent(this,StatusActivity.class);
+            intent.putExtra("bname",mBname);
+            intent.putExtra("boardinfo",mBoardinfo);
+            startActivity(intent);
+
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
             alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
@@ -166,5 +185,55 @@ public class BoardActivity extends AppCompatActivity
     @Override
     public void onFinishTransmission(String data) {
 
+    }
+    @Override
+    public String onRequestRecieved(String data) {
+        // サーバーからの要求（data）を受信
+        //System.out.println("ReqRecieved:"+data);
+        String mData = "";
+        DataStructureUtil dsHelper = new DataStructureUtil();
+
+        String cmd = dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
+
+        Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
+        if (cmd.equals("9C")) {  // 電源OFF画面 onFinishRecieveProgress で処理
+            mData = "50@$";
+        } else if (cmd.equals("99")) {
+            mData = "99@$";
+        } else if (cmd.equals("91")) {  // 受信エラー処理 onFinishRecieveProgress で処理
+            mData = "";
+        } else if (cmd.equals("92")) {  // タイムアウト onFinishRecieveProgress で処理
+            mData = "";
+        }
+        return mData;
+    }
+
+    @Override
+    public void onFinishRecieveProgress(String data) {
+        // サーバー発呼のコマンド送受信後の処理
+        DataStructureUtil dsHelper = new DataStructureUtil();
+
+        String cmd = dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
+        Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
+        if (cmd.equals("9C")) {  // 電源OFF画面
+
+            Intent intent = new Intent(this, EndOffActivity.class);
+            startActivity(intent);
+        } else if (cmd.equals("99")) { // accept キャンセル
+            // ここでは何もせず、応答の"99"受信で処理
+        } else if (cmd.equals("91")) {  // 受信エラー処理
+            System.out.println("※※※※　受信エラー ※※※");
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            //想定外コマンドの時も受信待機は継続
+            recieveFragment.listen();
+        } else if (cmd.equals("92")) {  // タイムアウト
+            System.out.println("※※※※　受信タイムアウト ※※※");
+            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            //想定外コマンドの時も受信待機は継続
+            recieveFragment.listen();
+        } else {
+            //想定外コマンドの時も受信待機は継続
+            recieveFragment.listen();
+        }
     }
 }
