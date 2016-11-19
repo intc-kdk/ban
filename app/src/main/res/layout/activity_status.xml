@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/bname"
-            android:textSize="30sp"
+            android:textSize="40sp"
             android:textColor="@color/colorTextBlack"
             android:padding="15dp"
             android:textAlignment="center" />
@@ -33,11 +33,11 @@
             android:layout_gravity="center_vertical">
 
             <fragment
-                android:layout_height="1003dp"
+                android:layout_height="wrap_content"
                 android:name="com.intc_service.boardapp.StatusFragment"
                 android:id="@+id/StatusList"
                 tools:layout="@layout/fragment_status_list"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:layout_width="700dp" />
         </FrameLayout>
 

@@ -35,6 +35,7 @@ public class BoardActivity extends AppCompatActivity
     private String mBname;
     private Bundle mBoardinfo = new Bundle();
 
+    private int mBtnId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,9 +120,11 @@ public class BoardActivity extends AppCompatActivity
 
         switch (id){
             case R.id.btnReturnMain:
+                mBtnId=R.id.btnReturnMain;
+                sendFragment.halt("99@$");
                 // 場所選択に戻る
-                intent = new Intent(this,MainActivity.class);
-                startActivity(intent);
+                /*intent = new Intent(this,MainActivity.class);
+                startActivity(intent);*/
                 break;
             default:
                 int row = (int)v.getTag();
@@ -155,22 +158,23 @@ public class BoardActivity extends AppCompatActivity
         if(cmd.equals("72")){ //機器情報
             if(bdRecievedData.getString("format").equals("JSON")) {
                 ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
-                mBname = bdRecievedData.getString("tx_name");
+                mBname = bdRecievedData.getString("tx_bname");
                 mBoardinfo = bdRecievedData;
                 sendFragment.halt("99@$");  // 待ち受けを停止する
-                // 盤ステータス画面へ
-                /*Intent intent = new Intent(this,StatusActivity.class);
-                intent.putExtra("bname",selectedBoard);
-                intent.putExtra("boardinfo",bdRecievedData);
-                startActivity(intent);*/
             }
         } else if (cmd.equals("99")) {  // サーバークローズ
             recieveFragment.closeServer(); //待ち受けを中止する。
-            // 盤ステータス画面へ
-            Intent intent = new Intent(this,StatusActivity.class);
-            intent.putExtra("bname",mBname);
-            intent.putExtra("boardinfo",mBoardinfo);
-            startActivity(intent);
+            if(mBtnId == R.id.btnReturnMain){
+                // 場所選択に戻る
+                Intent intent = new Intent(this,MainActivity.class);
+                startActivity(intent);
+            }else {
+                // 盤ステータス画面へ
+                Intent intent = new Intent(this, StatusActivity.class);
+                intent.putExtra("bname", mBname);
+                intent.putExtra("boardinfo", mBoardinfo);
+                startActivity(intent);
+            }
 
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);

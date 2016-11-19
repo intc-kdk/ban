@@ -28,9 +28,9 @@ public class AppLogRepository {
     private AppLogRepository() {}
 
     //ログを新規に保存する
-    public static String create(Context context, String kind, String data){
+    public static String create(Context context, String distIp, int distPort, String kind, String data){
 
-        String log = makeLogData(context, kind, data);
+        String log = makeLogData(context, distIp, distPort,  kind, data);
         //出力先ディレクトリを取得
         File outputDir = getOutputDir(context);
 
@@ -116,20 +116,16 @@ public class AppLogRepository {
         return true;
     }
     // ログデータを作成する
-    private static String makeLogData(Context context, String kind, String data){
-        // ShraedPreferencesから取得
-        String serverIp = String.valueOf(SettingPrefUtil.getServerIpAddress(context));
-        String serverPort = String.valueOf(SettingPrefUtil.getServerPort(context));
-
+    private static String makeLogData(Context context, String distIp, int distPort, String kind, String data){
         Calendar now = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT);
 
         String datetime = sdf.format(now.getTime());
         String ip;
         if(kind.equals("S")){
-            ip = serverIp + ":" + serverPort;
+            ip = distIp + ":" + String.valueOf(distPort);
         }else{
-            ip = serverIp + ":*";
+            ip = distIp + ":*";
         }
 
         String[] log = {datetime, kind, ip, data};

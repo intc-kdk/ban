@@ -12,4 +12,4 @@
     tools:context="com.intc_service.boardapp.StatusFragment"
     tools:listitem="@layout/fragment_status"
     android:paddingBottom="20dp"
-    android:layout_gravity="center_vertical" />
+    android:layout_gravity="center" />

@@ -56,7 +56,7 @@ public class StatusActivity extends AppCompatActivity
         String tx_bname = intent.getStringExtra("bname");
         TextView mLabelView = (TextView)findViewById(R.id.bname);
         mLabelView.setText(tx_bname);
-
+System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+ tx_bname);
         Bundle bdBoardInfo = intent.getBundleExtra("boardinfo");
         String bo_active = bdBoardInfo.getString("bo_active");
 

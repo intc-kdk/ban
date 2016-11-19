@@ -67,7 +67,7 @@ public class TcpClient {
             writer.write(mSendData);
             writer.flush();
 
-            AppLogRepository.create(mContext,"S",mSendData);
+            AppLogRepository.create(mContext,mHost, mPort, "S",mSendData);
             System.out.println("<< サーバーへ送信 >>"+mSendData);
 
             //レスポンス
@@ -80,28 +80,28 @@ public class TcpClient {
                 }
             }
             message=builder.toString();
-            AppLogRepository.create(mContext,"R",message);
+            AppLogRepository.create(mContext,mHost, mPort, "R",message);
             System.out.println("<< サーバーから受信 >>"+message);
             if(message.length() == 0 || message.indexOf("$") < 0 ){
                 // 受信サイズ0
                 System.out.println("Recieved illegal data");
                 message = "91@Recieved illegal data$";
-                AppLogRepository.create(mContext,"E",message);
+                AppLogRepository.create(mContext,mHost, mPort, "E",message);
             }
         } catch ( SocketException e) {
             System.out.println("SocketException error");
             message = "91@SocketException error: " + e.getMessage()+"$";
-            AppLogRepository.create(mContext,"E",message);
+            AppLogRepository.create(mContext,mHost, mPort, "E",message);
             e.printStackTrace();
         } catch ( SocketTimeoutException e) {
             System.out.println("SocketTimeoutException error");
             message = "92@SocketTimeoutException error: " + e.getMessage()+"$";
-            AppLogRepository.create(mContext,"E",message);
+            AppLogRepository.create(mContext,mHost, mPort, "E",message);
             e.printStackTrace();
         } catch (IOException  e) {
             System.out.println(message);
             message = "93@IOException error: " + e.getMessage()+"$";
-            AppLogRepository.create(mContext,"E",message);
+            AppLogRepository.create(mContext,mHost, mPort, "E",message);
             e.printStackTrace();
         } finally {
             try{

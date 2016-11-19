@@ -97,6 +97,7 @@ public class ReceptionFragment extends Fragment {
             BufferedReader reader = null;
             BufferedWriter writer = null;
             String response = "";
+
             @Override
             protected void onPreExecute(){
 
@@ -105,6 +106,7 @@ public class ReceptionFragment extends Fragment {
             protected String doInBackground(Void... voids) {
                 String message = "";
                 Context context = getActivity();
+
                 try{
                     if(mServer == null) {
                         mServer = new ServerSocket();
@@ -118,7 +120,7 @@ public class ReceptionFragment extends Fragment {
                     mSocket.setSoTimeout(timeout);
                     reader = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
                     writer = new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream()));
-
+                    String remoteAddr = mSocket.getInetAddress().toString();
                     //リクエスト受信
                     int result;
                     StringBuilder builder = new StringBuilder();
@@ -129,14 +131,14 @@ public class ReceptionFragment extends Fragment {
                         }
                     }
                     message=builder.toString();
-                    AppLogRepository.create(context,"R",message);
+                    AppLogRepository.create(context,remoteAddr, mPort, "R",message);
                     System.out.println("<< サーバーから受信 >>"+message);
 
                     if(message.length() == 0 || message.indexOf("$") < 0 ){
                         // 受信サイズ0
                         System.out.println("Recieved illegal data");
                         message = "91@Recieved illegal data$";
-                        AppLogRepository.create(context,"E",message);
+                        AppLogRepository.create(context,remoteAddr, mPort, "E",message);
                     }
                     // Activity へ リクエストを返し、返信データ（response）を受け取る
                     response = ((ReceptionFragmentListener)getActivity()).onRequestRecieved(message);
@@ -151,7 +153,7 @@ public class ReceptionFragment extends Fragment {
                         // データが設定されているとき、レスポンス送信
                         writer.write(response);
                         writer.flush();
-                        AppLogRepository.create(context,"S",response);
+                        AppLogRepository.create(context,remoteAddr, mPort, "S",response);
                         System.out.println("<< サーバーへ送信 >>"+response);
                         writer.close();
                         reader.close();
@@ -164,7 +166,7 @@ public class ReceptionFragment extends Fragment {
                 }catch(IOException e){
                     System.out.println("Exception error");
                     message = "92@Exception error: " + e.getMessage()+"$";
-                    AppLogRepository.create(context,"E",message);
+                    AppLogRepository.create(context,"", 0, "E",message);
                     e.printStackTrace();
                 } finally {
                     try{
