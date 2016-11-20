@@ -116,31 +116,31 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
             case 1:
                 holder.mLabelView.setHeight(900);
                 holder.mLabelView.setTextSize(80);
-                holder.mLabelBefore.setHeight(650);
+                holder.mLabelBefore.setHeight(900);
                 holder.mLabelBefore.setTextSize(80);
                 break;
             case 2:
                 holder.mLabelView.setHeight(600);
                 holder.mLabelView.setTextSize(70);
-                holder.mLabelBefore.setHeight(350);
+                holder.mLabelBefore.setHeight(600);
                 holder.mLabelBefore.setTextSize(70);
                 break;
             case 3:
                 holder.mLabelView.setHeight(420);
                 holder.mLabelView.setTextSize(65);
-                holder.mLabelBefore.setHeight(250);
+                holder.mLabelBefore.setHeight(420);
                 holder.mLabelBefore.setTextSize(65);
                 break;
             case 4:
                 holder.mLabelView.setHeight(300);
                 holder.mLabelView.setTextSize(65);
-                holder.mLabelBefore.setHeight(200);
+                holder.mLabelBefore.setHeight(300);
                 holder.mLabelBefore.setTextSize(65);
                 break;
             default:
                 holder.mLabelView.setHeight(225);
                 holder.mLabelView.setTextSize(40);
-                holder.mLabelBefore.setHeight(155);
+                holder.mLabelBefore.setHeight(225);
                 holder.mLabelBefore.setTextSize(40);
                 break;
         }
