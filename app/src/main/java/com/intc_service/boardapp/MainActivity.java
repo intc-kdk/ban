@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         }else if(cmd.equals("72")){ //機器情報
             if(bdRecievedData.getString("format").equals("JSON")) {
                 ArrayList arrEquip = (ArrayList)bdRecievedData.getParcelableArrayList("m_device"); //機器情報を取り出す
-                mBname = bdRecievedData.getString("tx_name");
+                mBname = bdRecievedData.getString("tx_bname");
                 mBoardinfo = bdRecievedData;
                 sendFragment.halt("99@$");  // 待ち受けを停止する
 

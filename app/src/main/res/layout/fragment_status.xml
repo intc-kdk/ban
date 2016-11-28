@@ -12,8 +12,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000000"
-            android:layout_margin="11dp"
-            android:id="@+id/wrap_frame">
+            android:id="@+id/wrap_frame"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="11dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -21,7 +24,7 @@
                 android:id="@+id/textView"
                 android:width="700dp"
                 android:textSize="40sp"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:gravity="center_vertical" />
         </FrameLayout>
 
@@ -29,25 +32,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/label_before"
-            android:layout_margin="16dp"
             android:textSize="40sp"
             android:width="700dp"
             android:textAlignment="center"
             android:textColor="@color/colorText"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="21dp"
+            android:layout_marginRight="21dp"
+            android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/colorText"
             android:textAlignment="center"
             android:width="700dp"
             android:background="@color/colorText"
             android:gravity="center_vertical"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="21dp"
+            android:layout_marginLeft="21dp"
+            android:layout_marginBottom="16dp" />
 
     </FrameLayout>
 

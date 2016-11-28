@@ -52,15 +52,17 @@ public class StatusFragment extends Fragment {
         // 手順データを取得
         Intent intent = getActivity().getIntent();
         Bundle bdBoard = intent.getBundleExtra("boardinfo");
-        ArrayList arrDevice = (ArrayList)bdBoard.getParcelableArrayList("m_device"); //機器情報を取り出す
-        for (Object value : arrDevice) {
-            Bundle row = (Bundle) value;  // Bundleの入れ子なのでキャスト
-            //if(!row.getString("tx_lb").equals("") && !row.getString("tx_clr").equals("")){
-                // ラベル、カラーが空白の行は無視
-                ITEMS.add(BoardDataUtil.toList(row));
-            //}
-        }
+        ArrayList arrDevice = (ArrayList) bdBoard.getParcelableArrayList("m_device"); //機器情報を取り出す
 
+        if (arrDevice != null){
+            for (Object value : arrDevice) {
+                Bundle row = (Bundle) value;  // Bundleの入れ子なのでキャスト
+                // ラベル、カラーが空白の行は無視
+                if(!row.getString("tx_lb").isEmpty() && !row.getString("tx_clr").isEmpty()) {
+                    ITEMS.add(BoardDataUtil.toList(row));
+                }
+            }
+        }
     }
 
     @Override
