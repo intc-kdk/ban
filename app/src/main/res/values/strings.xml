@@ -2,5 +2,5 @@
     <string name="app_name">盤タブレット</string>
 
     <string name="nw_err_title">サーバと通信できません。</string>
-    <string name="nw_err_message">サーバ・ネットワークを確認して、再度アプリケーションを起動してください。</string>
+    <string name="nw_err_message">リトライします。</string>
 </resources>

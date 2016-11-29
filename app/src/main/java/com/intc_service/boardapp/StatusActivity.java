@@ -139,11 +139,11 @@ public class StatusActivity extends AppCompatActivity
 
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
-            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, null,  getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
             recieveFragment.listen();
         } else if (cmd.equals("92")) {  // タイムアウト
             System.out.println("※※※※　受信タイムアウト ※※※"+data);
-            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, null, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
             recieveFragment.listen();
         }else{
             recieveFragment.listen();
@@ -168,8 +168,12 @@ public class StatusActivity extends AppCompatActivity
         List<BoardItem> ITEMS = new ArrayList<>();
         for (Object value : data) {
             Bundle row = (Bundle) value;  // Bundleの入れ子なのでキャスト
-            ITEMS.add(BoardDataUtil.toList(row));
+            // ラベル、カラーが空白の行は無視
+            if(!row.getString("tx_lb").isEmpty() && !row.getString("tx_clr").isEmpty()) {
+                ITEMS.add(BoardDataUtil.toList(row));
+            }
         }
+
         mStatusFragment.updateStatus(ITEMS);
     }
 
@@ -194,10 +198,10 @@ public class StatusActivity extends AppCompatActivity
             startActivity(intent);
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
-            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, sendFragment,  getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
         } else if (cmd.equals("92")) {  // タイムアウト
             System.out.println("※※※※　受信タイムアウト ※※※"+data);
-            alertDialogUtil.show(this, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            alertDialogUtil.show(this, sendFragment,  getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
         }
     }
 
