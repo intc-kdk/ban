@@ -196,6 +196,9 @@ public class StatusActivity extends AppCompatActivity
             intent = new Intent(this, MainActivity.class);
             intent.putExtra("cmd71",mRecievedData);  // 71（場所、盤データをセットし、場所選択画面へ）
             startActivity(intent);
+        }else if (cmd.equals("9C")) {  // 電源OFF画面
+            Intent intent = new Intent(this, EndOffActivity.class);
+            startActivity(intent);
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
             alertDialogUtil.show(this, sendFragment,  getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));

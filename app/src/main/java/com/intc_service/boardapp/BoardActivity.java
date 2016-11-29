@@ -162,6 +162,9 @@ public class BoardActivity extends AppCompatActivity
                 mBoardinfo = bdRecievedData;
                 sendFragment.halt("99@$");  // 待ち受けを停止する
             }
+        }else if (cmd.equals("9C")) {  // 電源OFF画面
+            Intent intent = new Intent(this, EndOffActivity.class);
+            startActivity(intent);
         } else if (cmd.equals("99")) {  // サーバークローズ
             recieveFragment.closeServer(); //待ち受けを中止する。
             if(mBtnId == R.id.btnReturnMain){
