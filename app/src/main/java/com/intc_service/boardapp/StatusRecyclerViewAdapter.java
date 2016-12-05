@@ -139,9 +139,9 @@ public class StatusRecyclerViewAdapter extends RecyclerView.Adapter<StatusRecycl
                 break;
             default:
                 holder.mLabelView.setHeight(225);
-                holder.mLabelView.setTextSize(40);
+                holder.mLabelView.setTextSize(50);
                 holder.mLabelBefore.setHeight(225);
-                holder.mLabelBefore.setTextSize(40);
+                holder.mLabelBefore.setTextSize(50);
                 break;
         }
     }
