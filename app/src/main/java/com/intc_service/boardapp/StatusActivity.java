@@ -49,6 +49,9 @@ public class StatusActivity extends AppCompatActivity
         Button btn = (Button) findViewById(R.id.btnReturnBoard);
         btn.setOnClickListener(this);
 
+        Button btnUpdate = (Button) findViewById(R.id.btn_update);
+        btnUpdate.setOnClickListener(this);
+
         // 機器データをIntentから取得
         Intent intent = getIntent();
 
@@ -152,12 +155,17 @@ public class StatusActivity extends AppCompatActivity
     }
     public void onClick(View v){
         int id = v.getId();
-
+        String mData ="";
+        DataStructureUtil ds = new DataStructureUtil();
         switch (id){
             case R.id.btnReturnBoard:
-                DataStructureUtil ds = new DataStructureUtil();
-                String mData = ds.makeSendData("32", "");
+                mData = ds.makeSendData("32", "");
                 // [P] 盤再選択コマンドを送信
+                sendFragment.send(mData);
+                break;
+            case R.id.btn_update: // 画面更新ボタンクリック
+                // サーバーへ画面更新[90]送信
+                mData = ds.makeSendData("90", "");
                 sendFragment.send(mData);
                 break;
         }
@@ -196,6 +204,10 @@ public class StatusActivity extends AppCompatActivity
             intent = new Intent(this, MainActivity.class);
             intent.putExtra("cmd71",mRecievedData);  // 71（場所、盤データをセットし、場所選択画面へ）
             startActivity(intent);
+        }else if (cmd.equals("9N")) {  // 画面更新（正常）
+            // 受信待機済みのため 何もしない
+        }else if (cmd.equals("9Q")) {  // 画面更新（異常）
+            // 受信待機済みのため 何もしない
         }else if (cmd.equals("9C")) {  // 電源OFF画面
             Intent intent = new Intent(this, EndOffActivity.class);
             startActivity(intent);

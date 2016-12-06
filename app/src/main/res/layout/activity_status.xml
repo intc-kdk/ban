@@ -28,9 +28,9 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="967dp"
             android:layout_weight="0.87"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:layout_height="960dp">
 
             <fragment
                 android:layout_height="wrap_content"
@@ -39,20 +39,44 @@
                 tools:layout="@layout/fragment_status_list"
                 android:layout_gravity="center"
                 android:layout_width="700dp" />
+
         </FrameLayout>
 
-        <Button
-            android:text="盤選択へ戻る"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnReturnBoard"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:height="90dp"
-            android:textSize="30sp"
-            android:width="120dp"
-            android:background="@drawable/bg_return_on" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="盤選択へ戻る"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnReturnBoard"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:height="90dp"
+                android:textSize="30sp"
+                android:width="120dp"
+                android:background="@drawable/bg_return_on"
+                android:layout_gravity="left" />
+
+            <Button
+                android:text="画面更新"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_update"
+                android:layout_gravity="right"
+                android:textSize="30sp"
+                android:width="70dp"
+                android:height="80dp"
+                android:textColor="@color/colorTextBlack"
+                android:background="@drawable/bg_diff_on"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
+        </FrameLayout>
+
     </LinearLayout>
 </RelativeLayout>
