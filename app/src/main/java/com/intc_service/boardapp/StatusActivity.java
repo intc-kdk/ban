@@ -35,7 +35,7 @@ public class StatusActivity extends AppCompatActivity
     private StatusFragment mStatusFragment;
 
     private String mRecievedData;
-
+    private boolean noTap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +51,7 @@ public class StatusActivity extends AppCompatActivity
 
         Button btnUpdate = (Button) findViewById(R.id.btn_update);
         btnUpdate.setOnClickListener(this);
+        noTap=true;
 
         // 機器データをIntentから取得
         Intent intent = getIntent();
@@ -164,9 +165,12 @@ public class StatusActivity extends AppCompatActivity
                 sendFragment.send(mData);
                 break;
             case R.id.btn_update: // 画面更新ボタンクリック
-                // サーバーへ画面更新[90]送信
-                mData = ds.makeSendData("90", "");
-                sendFragment.send(mData);
+                if(noTap) {
+                    // サーバーへ画面更新[90]送信
+                    mData = ds.makeSendData("90", "");
+                    sendFragment.send(mData);
+                    noTap=false;
+                }
                 break;
         }
     }
@@ -205,9 +209,9 @@ public class StatusActivity extends AppCompatActivity
             intent.putExtra("cmd71",mRecievedData);  // 71（場所、盤データをセットし、場所選択画面へ）
             startActivity(intent);
         }else if (cmd.equals("9N")) {  // 画面更新（正常）
-            // 受信待機済みのため 何もしない
+            noTap = true;
         }else if (cmd.equals("9Q")) {  // 画面更新（異常）
-            // 受信待機済みのため 何もしない
+            noTap = true;
         }else if (cmd.equals("9C")) {  // 電源OFF画面
             Intent intent = new Intent(this, EndOffActivity.class);
             startActivity(intent);
