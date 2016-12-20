@@ -36,6 +36,7 @@ public class StatusActivity extends AppCompatActivity
 
     private String mRecievedData;
     private boolean noTap;
+    private Button mBtnUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +47,12 @@ public class StatusActivity extends AppCompatActivity
                 .findFragmentById(R.id.StatusList);
 
         // リスナーの設定
-        Button btn = (Button) findViewById(R.id.btnReturnBoard);
-        btn.setOnClickListener(this);
+        Button btnReturn = (Button) findViewById(R.id.btnReturnBoard);
+        btnReturn.setOnClickListener(this);
 
-        Button btnUpdate = (Button) findViewById(R.id.btn_update);
-        btnUpdate.setOnClickListener(this);
+        mBtnUpdate = (Button) findViewById(R.id.btn_update);
+        mBtnUpdate.setOnClickListener(this);
+        mBtnUpdate.setVisibility(View.INVISIBLE);
         noTap=true;
 
         // 機器データをIntentから取得
@@ -122,7 +124,7 @@ public class StatusActivity extends AppCompatActivity
 
         String cmd = (String)dsHelper.setRecievedData(data);  // データ構造のヘルパー 受信データを渡す。戻り値はコマンド
         Bundle bdRecievedData = dsHelper.getRecievedData();  // 渡したデータを解析し、Bundleを返す
-
+        mBtnUpdate.setVisibility(View.INVISIBLE);
         if(cmd.equals("73")) { //機器情報
             if (bdRecievedData.getString("format").equals("JSON")) {
                 String bo_active = bdRecievedData.getString("bo_active");
@@ -144,10 +146,12 @@ public class StatusActivity extends AppCompatActivity
         } else if (cmd.equals("91")) {  // 受信エラー処理
             System.out.println("※※※※　受信エラー ※※※"+data);
             alertDialogUtil.show(this, null,  getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            mBtnUpdate.setVisibility(View.VISIBLE);
             recieveFragment.listen();
         } else if (cmd.equals("92")) {  // タイムアウト
             System.out.println("※※※※　受信タイムアウト ※※※"+data);
             alertDialogUtil.show(this, null, getResources().getString(R.string.nw_err_title),getResources().getString(R.string.nw_err_message));
+            mBtnUpdate.setVisibility(View.VISIBLE);
             recieveFragment.listen();
         }else{
             recieveFragment.listen();
